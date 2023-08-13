@@ -8,9 +8,9 @@ addpath(genpath('../../dependences'));
 addpath(genpath('../../datas'));
 
 %% 测试控制参数
-EbN0_scale=2;                                     % EbN0测试范围  (译码门限 1.4)
-BP_times=6;                                         % BP译码迭代次数
-run_times=1e4;                                      % 生成帧数
+EbN0_scale=2;                                       % EbN0测试范围  (译码门限 1.4)
+BP_times=2;                                         % BP译码迭代次数
+run_times=1e5;                                      % 生成帧数
 
 %% 信号调制及编码参数
 sps = 4;                        % 单位符号采样数
@@ -75,7 +75,7 @@ parfor i=1:run_times
 
     %% 当前位置
     label_val_t(i)=rand()*2-1;
-    label_val_p(i)=rand()*40-20;
+    label_val_p(i)=rand()*60-30;
     label_val_f(i)=rand()*1e-4-5e-5;
     ErrIterator = comm.PhaseFrequencyOffset('FrequencyOffset',label_val_f(i),....
     'PhaseOffset',label_val_p(i),'SampleRate',sps);
@@ -83,8 +83,8 @@ parfor i=1:run_times
     txSig=TEmodel(txSig,label_val_t(i));
 
     %% 引入信道噪声
-    EbN0=EbN0_scale;                           % 归一化编码前比特能量Eb/N0
-    EbN0_code=EbN0+10*log10(code_r_real);              % 归一化编码后比特能量Eb_code/N0
+    EbN0=EbN0_scale;                              % 归一化编码前比特能量Eb/N0
+    EbN0_code=EbN0+10*log10(code_r_real);         % 归一化编码后比特能量Eb_code/N0
     EsN0=10*log10(2)+EbN0_code;                   % 归一化调制符号能量Es/N0 ( QPSK调制 )
     SNR=EsN0-10*log10(sps);                       % 位同步前的采样序列信噪比
     rxSig=awgn(txSig,SNR,'measured');

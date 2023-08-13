@@ -9,7 +9,7 @@
 
 load("data.mat");
 x_data = df(:,[1:4,13:16]);
-y_data = df(:,25);
+y_data = df(:,23);
 
 x = x_data';
 t = y_data';
@@ -22,7 +22,7 @@ t = y_data';
 trainFcn = 'trainlm';  % Levenberg-Marquardt backpropagation.
 
 % Create a Fitting Network
-hiddenLayerSize = 10;
+hiddenLayerSize = 20;
 net = fitnet(hiddenLayerSize,trainFcn);
 
 % Choose Input and Output Pre/Post-Processing Functions
@@ -85,7 +85,7 @@ if (false)
     genFunction(net,'myNeuralNetworkFunction');
     y = myNeuralNetworkFunction(x);
 end
-if (true)
+if (false)
     % Generate a matrix-only MATLAB function for neural network code
     % generation with MATLAB Coder tools.
     genFunction(net,'myNeuralNetworkFunction','MatrixOnly','yes');
