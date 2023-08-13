@@ -10,7 +10,7 @@ function [Est_phase,Est_freq,Est_time] = single_DNN_estimate_joint(QPSK_frame_sa
 
 %% 内置参数
 DNN_iterNum = 1;            % DNN迭代次数
-BP_Num = 6;
+BP_Num = 2;
 
 %% LDPC译码器
 ldpcDec_for_Fun = comm.LDPCDecoder('ParityCheckMatrix',H,'DecisionMethod','Soft decision','MaximumIterationCount',BP_Num,'OutputValue','Whole codeword');
@@ -59,7 +59,7 @@ for i=1:DNN_iterNum
     
     %% 计算目标函数1
     LLR_vector_self=ldpcDec_for_Fun(LLR);
-    Fun_d0_n=0.5*sum(log(1+cosh(LLR_vector_self)));
+    Fun_d0_n=0.5*mean(log(1+cosh(LLR_vector_self)));
     BPSK_rec=tanh(LLR_vector_self/2);
     QPSK_rec=(1i*BPSK_rec(1:2:end)+BPSK_rec(2:2:end))/sqrt(2);
     Fun_d1_p_n=imag(sum(rxSig_checked.*conj(QPSK_rec)))/symbol_noise_var;
